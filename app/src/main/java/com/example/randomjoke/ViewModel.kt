@@ -8,9 +8,13 @@ class ViewModel(private val model: Model) {
         this.callback = callback
         model.init(object : ResultCallback{
 
-            override fun provideSuccess(data: Joke) = callback.provideText(data.getJokeUi())
+            override fun provideSuccess(data: Joke) {
+                callback.provideText(data.getJokeUi())
+            }
 
-            override fun provideError(error: JokeFailure) = callback.provideText(error.getMessage())
+            override fun provideError(error: JokeFailure) {
+                callback.provideText(error.getMessage())
+            }
         })
     }
 
