@@ -2,20 +2,20 @@ package com.example.randomjoke
 
 class ViewModel(private val model: Model) {
 
-    private var callback: TextCallback? = null
+    private var dataCallback: DataCallback? = null
 
-    fun init(callback: TextCallback){
-        this.callback = callback
-        model.init(object : ResultCallback{
-
-            override fun provideSuccess(data: Joke) {
-                callback.provideText(data.getJokeUi())
+    private val jokeCallback = object : JokeCallback{
+        override fun provide(joke: Joke) {
+            dataCallback?.let{
+                joke.map(it)
             }
+        }
 
-            override fun provideError(error: JokeFailure) {
-                callback.provideText(error.getMessage())
-            }
-        })
+    }
+
+    fun init(callback: DataCallback){
+        dataCallback = callback
+        model.init(jokeCallback)
     }
 
     fun getJoke(){
@@ -23,8 +23,15 @@ class ViewModel(private val model: Model) {
     }
 
     fun clear(){
-        callback = null
+        dataCallback = null
         model.clear()
     }
 
+    fun chooseFavorites(favorites: Boolean) {
+        model.chooseDataSource(favorites)
+    }
+
+    fun changeJokeStatus(){
+        model.changeJokeStatus(jokeCallback)
+    }
 }

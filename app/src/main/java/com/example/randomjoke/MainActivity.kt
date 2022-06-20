@@ -3,8 +3,7 @@ package com.example.randomjoke
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.Button
-import android.widget.TextView
+import android.widget.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -18,6 +17,17 @@ class MainActivity : AppCompatActivity() {
         val button = findViewById<Button>(R.id.actionButton)
         val progressBar = findViewById<View>(R.id.progressBar)
         val textView = findViewById<TextView>(R.id.textView)
+        val checkBox = findViewById<CheckBox>(R.id.checkBox)
+        val changeButton = findViewById<ImageButton>(R.id.changeButton)
+
+        changeButton.setOnClickListener {
+            viewModel.changeJokeStatus()
+        }
+
+        checkBox.setOnCheckedChangeListener { _, isChecked ->
+            viewModel.chooseFavorites(isChecked)
+        }
+
         progressBar.visibility = View.INVISIBLE
 
         button.setOnClickListener{
@@ -26,13 +36,16 @@ class MainActivity : AppCompatActivity() {
             viewModel.getJoke()
         }
 
-        viewModel.init(object : TextCallback{
+        viewModel.init(object : DataCallback{
             override fun provideText(text: String) = runOnUiThread {
                 button.isEnabled = true
                 progressBar.visibility = View.INVISIBLE
                 textView.text = text
             }
 
+            override fun provideIconRes(id: Int) = runOnUiThread {
+                changeButton.setImageResource(id)
+                }
         })
     }
 
