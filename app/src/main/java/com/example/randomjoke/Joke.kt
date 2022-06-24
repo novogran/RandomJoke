@@ -1,17 +1,14 @@
 package com.example.randomjoke
 
-import androidx.annotation.DrawableRes
+data class Joke(
+    private val id: Int,
+    private val  type: String,
+    private val  text: String,
+    private val  punchline: String,
+) {
+    fun toBaseJoke() = BaseJokeUiModel(text,punchline)
 
-abstract class Joke(private val text: String, private val punchline: String) {
+    fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(id,this)
 
-    protected fun getJokeUi() = "$text\n$punchline"
-
-    @DrawableRes
-    abstract fun getIconResId(): Int
-
-    fun map(callback: DataCallback)  = callback.run {
-        provideText(getJokeUi())
-        provideIconRes(getIconResId())
-    }
-
+    fun toFavoriteJoke() = FavoriteJokeUiModel(text,punchline)
 }
