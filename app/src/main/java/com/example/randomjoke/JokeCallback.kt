@@ -2,6 +2,6 @@ package com.example.randomjoke
 
 interface JokeCallback {
 
-    fun provide(joke: Joke)
+    fun provide(joke: JokeUiModel)
 
 }
