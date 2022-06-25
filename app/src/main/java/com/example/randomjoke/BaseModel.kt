@@ -1,5 +1,8 @@
 package com.example.randomjoke
 
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
+
 class BaseModel(
     private val cacheDataSource: CacheDataSource,
     private val cloudDataSource: CloudDataSource,
@@ -10,53 +13,41 @@ class BaseModel(
     private val noConnection by lazy { NoConnection(resourceManager) }
     private val serviceUnavailable by lazy { ServiceUnavailable(resourceManager) }
 
-    private var jokeCallback: JokeCallback? = null
     private var cachedJoke: Joke? = null
     private var getJokeFromCache = false
 
-    override fun getJoke() {
+    override suspend fun getJoke(): JokeUiModel = withContext(Dispatchers.IO) {
         if (getJokeFromCache) {
-            cloudDataSource.getJoke(object : JokeCloudCallback {
-                override fun provide(joke: Joke) {
-                    cachedJoke = joke
-                    jokeCallback?.provide(joke.toFavoriteJoke())
+            return@withContext when (val result = cacheDataSource.getJoke()){
+                is Result.Success<Joke> -> result.data.let {
+                    cachedJoke = it
+                    it.toFavoriteJoke()
                 }
-
-                override fun fail(error: ErrorType) {
-                    cachedJoke =  null
-                    jokeCallback?.provide(FailedJoke(noCachedJokes.getMessage()))
-                }
-            })
-        } else {
-            cloudDataSource.getJoke(object :JokeCloudCallback{
-                override fun provide(joke: Joke) {
-                    cachedJoke = joke
-                    jokeCallback?.provide(joke.toBaseJoke())
-                }
-
-                override fun fail(error: ErrorType) {
+                is Result.Error -> {
                     cachedJoke = null
-                    val failure = if(error == ErrorType.NO_CONNECTION) noConnection else serviceUnavailable
-                    jokeCallback?.provide(FailedJoke(failure.getMessage()))
+                    FailedJokeUiModel(noCachedJokes.getMessage())
                 }
-
-            })
+            }
+        } else {
+            return@withContext when (val result = cloudDataSource.getJoke()){
+                is Result.Success<JokeServerModel> -> {
+                    result.data.toJoke().let {
+                        cachedJoke = it
+                        it.toBaseJoke()
+                    }
+                }
+                is Result.Error<ErrorType> -> {
+                    cachedJoke = null
+                    val failure = if(result.exception == ErrorType.NO_CONNECTION)
+                        noConnection
+                    else serviceUnavailable
+                    FailedJokeUiModel(failure.getMessage())
+                }
+            }
         }
     }
 
-    override fun init(callback: JokeCallback) {
-        this.jokeCallback = callback
-    }
-
-    override fun clear() {
-        jokeCallback = null
-    }
-
-    override fun changeJokeStatus(callback: JokeCallback) {
-        cachedJoke?.let {
-            jokeCallback?.provide(it.change(cacheDataSource))
-        }
-    }
+    override suspend fun changeJokeStatus(): JokeUiModel? = cachedJoke?.change(cacheDataSource)
 
     override fun chooseDataSource(cached: Boolean) {
         getJokeFromCache = cached

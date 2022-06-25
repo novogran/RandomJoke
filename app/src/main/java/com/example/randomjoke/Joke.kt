@@ -8,7 +8,7 @@ data class Joke(
 ) {
     fun toBaseJoke() = BaseJokeUiModel(text,punchline)
 
-    fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(id,this)
+    suspend fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(id,this)
 
     fun toFavoriteJoke() = FavoriteJokeUiModel(text,punchline)
 }

@@ -2,24 +2,28 @@ package com.example.randomjoke
 
 class TestCacheDataSource: CacheDataSource {
 
-    private val list = ArrayList<Pair<Int, Joke>>()
+    private val map = HashMap<Int, Joke>()
+    private var success: Boolean = true
+    private var nextJokeIdToGet = -1
 
-    override fun addOrRemove(id: Int, joke: Joke): JokeUiModel {
-        val found = list.find { it.first == id }
-        return if (found != null) {
-            val joke = found.second.toBaseJoke()
-            list.remove(found)
-            joke
+    override suspend fun addOrRemove(id: Int, joke: Joke): JokeUiModel {
+        return if(map.containsKey(id)){
+            val result = map[id]!!.toBaseJoke()
+            map.remove(id)
+            result
         } else {
-            list.add(Pair(id, joke))
+            map[id] = joke
             joke.toFavoriteJoke()
         }
     }
 
-    override fun getJoke(jokeCachedCallback: JokeCachedCallback) {
-        if(list.isEmpty())
-            jokeCachedCallback.fail()
-        else
-            jokeCachedCallback.provide(list.random().second)
+    override suspend fun getJoke(): Result<Joke, Unit> {
+        return if (success) {
+            Result.Success(map[nextJokeIdToGet]!!)
+        } else {
+            Result.Error(Unit)
+        }
     }
+
+
 }

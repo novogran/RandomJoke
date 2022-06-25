@@ -2,13 +2,9 @@ package com.example.randomjoke
 
 interface Model {
 
-    fun getJoke()
+    suspend fun getJoke() : JokeUiModel
 
-    fun init(callback: JokeCallback)
-
-    fun clear()
-
-    fun changeJokeStatus(callback: JokeCallback)
+    suspend fun changeJokeStatus(): JokeUiModel?
 
     fun chooseDataSource(cached: Boolean)
 }
