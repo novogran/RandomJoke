@@ -1,14 +1,15 @@
 package com.example.randomjoke
 
-data class Joke(
+class Joke(
     private val id: Int,
     private val  type: String,
     private val  text: String,
     private val  punchline: String,
-) {
+): ChangeJoke {
     fun toBaseJoke() = BaseJokeUiModel(text,punchline)
 
-    suspend fun change(cacheDataSource: CacheDataSource) = cacheDataSource.addOrRemove(id,this)
+    override suspend fun change(changeJokeStatus: ChangeJokeStatus) =
+        changeJokeStatus.addOrRemove(id,this)
 
     fun toFavoriteJoke() = FavoriteJokeUiModel(text,punchline)
 
