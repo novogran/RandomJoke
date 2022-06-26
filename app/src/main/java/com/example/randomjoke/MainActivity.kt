@@ -43,7 +43,7 @@ class MainActivity : AppCompatActivity() {
                 textView.text = text
             }
 
-            override fun provideIconRes(id: Int) = runOnUiThread {
+            override fun provideIconRes(id: Int) {
                 changeButton.setImageResource(id)
                 }
         })

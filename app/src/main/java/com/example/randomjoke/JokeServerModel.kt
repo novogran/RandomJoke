@@ -12,9 +12,6 @@ data class JokeServerModel (
     @SerializedName("punchline")
     private val  punchline: String,
         ) {
-    fun toBaseJoke() = BaseJokeUiModel(text,punchline)
-
-    fun toFavoriteJoke() = FavoriteJokeUiModel(text,punchline)
 
     fun toJoke() = Joke(id, type, text, punchline)
 }
