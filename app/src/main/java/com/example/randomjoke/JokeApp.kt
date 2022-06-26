@@ -17,11 +17,25 @@ class JokeApp: Application() {
             .baseUrl("https://www.google.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .build()
+
+        val cachedJoke = BaseCachedJoke()
+        val cacheDataSource = BaseCacheDatasource(BaseRealmProvide())
+        val resourceManager = BaseResourceManager(this)
         viewModel = ViewModel(
             BaseModel(
-                BaseCacheDatasource(BaseRealmProvide()),
-                BaseCloudDataSource(retrofit.create(JokeService::class.java)),
-                BaseResourceManager(this)
+                cacheDataSource,
+                CacheResultHandler(
+                    cachedJoke,
+                    cacheDataSource,
+                    NoCachedJokes(resourceManager)
+                ),
+                CloudResultHandler(
+                    cachedJoke,
+                    BaseCloudDataSource(retrofit.create(JokeService::class.java)),
+                    NoConnection(resourceManager),
+                    ServiceUnavailable(resourceManager)
+                ),
+                cachedJoke
             )
         )
     }
