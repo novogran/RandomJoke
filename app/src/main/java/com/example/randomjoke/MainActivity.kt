@@ -7,13 +7,13 @@ import android.widget.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var viewModel: ViewModel
+    private lateinit var baseViewModel: BaseViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        viewModel = (application as JokeApp).viewModel
+        baseViewModel = (application as JokeApp).baseViewModel
         val button = findViewById<Button>(R.id.actionButton)
         val progressBar = findViewById<View>(R.id.progressBar)
         val textView = findViewById<TextView>(R.id.textView)
@@ -21,11 +21,11 @@ class MainActivity : AppCompatActivity() {
         val changeButton = findViewById<ImageButton>(R.id.changeButton)
 
         changeButton.setOnClickListener {
-            viewModel.changeJokeStatus()
+            baseViewModel.changeJokeStatus()
         }
 
         checkBox.setOnCheckedChangeListener { _, isChecked ->
-            viewModel.chooseFavorites(isChecked)
+            baseViewModel.chooseFavorites(isChecked)
         }
 
         progressBar.visibility = View.INVISIBLE
@@ -33,25 +33,14 @@ class MainActivity : AppCompatActivity() {
         button.setOnClickListener{
             button.isEnabled = false
             progressBar.visibility = View.VISIBLE
-            viewModel.getJoke()
+            baseViewModel.getJoke()
         }
 
-        viewModel.init(object : DataCallback{
-            override fun provideText(text: String) {
-                button.isEnabled = true
-                progressBar.visibility = View.INVISIBLE
-                textView.text = text
-            }
-
-            override fun provideIconRes(id: Int) {
-                changeButton.setImageResource(id)
-                }
-        })
+        baseViewModel.observe(this) { (text, drawableResId) ->
+            button.isEnabled = true
+            progressBar.visibility = View.INVISIBLE
+            textView.text = text
+            changeButton.setImageResource(drawableResId)
+        }
     }
-
-    override fun onDestroy() {
-        viewModel.clear()
-        super.onDestroy()
-    }
-
 }

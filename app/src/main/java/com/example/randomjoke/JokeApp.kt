@@ -8,7 +8,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class JokeApp: Application() {
 
-    lateinit var viewModel: ViewModel
+    lateinit var baseViewModel: BaseViewModel
 
     override fun onCreate() {
         super.onCreate()
@@ -21,7 +21,7 @@ class JokeApp: Application() {
         val cachedJoke = BaseCachedJoke()
         val cacheDataSource = BaseCacheDatasource(BaseRealmProvide())
         val resourceManager = BaseResourceManager(this)
-        viewModel = ViewModel(
+        baseViewModel = BaseViewModel(
             BaseModel(
                 cacheDataSource,
                 CacheResultHandler(
@@ -36,7 +36,8 @@ class JokeApp: Application() {
                     ServiceUnavailable(resourceManager)
                 ),
                 cachedJoke
-            )
+            ),
+            BaseCommunication()
         )
     }
 
