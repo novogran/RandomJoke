@@ -1,22 +1,23 @@
 package com.example.randomjoke
 
 import androidx.lifecycle.*
+import kotlinx.coroutines.CoroutineDispatcher
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class BaseViewModel(
     private val model: Model,
-    private val communication: Communication
+    private val communication: Communication,
+    private val dispatcher: CoroutineDispatcher = Dispatchers.Main
     ): ViewModel() {
 
-    val liveData = MutableLiveData<Pair<String,Int>>()
-
-    fun getJoke() = viewModelScope.launch{
+    fun getJoke() = viewModelScope.launch(dispatcher){
         communication.showData(model.getJoke().getData())
     }
 
     fun chooseFavorites(favorites: Boolean) = model.chooseDataSource(favorites)
 
-    fun changeJokeStatus() = viewModelScope.launch{
+    fun changeJokeStatus() = viewModelScope.launch(dispatcher){
         model.changeJokeStatus()?.let {
            communication.showData(it.getData())
         }
