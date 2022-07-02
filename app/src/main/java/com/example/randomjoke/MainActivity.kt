@@ -7,13 +7,13 @@ import android.widget.*
 
 class MainActivity : AppCompatActivity() {
 
-    private lateinit var baseViewModel: BaseViewModel
+    private lateinit var viewModel: BaseViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        baseViewModel = (application as JokeApp).baseViewModel
+        viewModel = (application as JokeApp).baseViewModel
         val button = findViewById<Button>(R.id.actionButton)
         val progressBar = findViewById<View>(R.id.progressBar)
         val textView = findViewById<TextView>(R.id.textView)
@@ -21,26 +21,44 @@ class MainActivity : AppCompatActivity() {
         val changeButton = findViewById<ImageButton>(R.id.changeButton)
 
         changeButton.setOnClickListener {
-            baseViewModel.changeJokeStatus()
+            viewModel.changeJokeStatus()
         }
 
         checkBox.setOnCheckedChangeListener { _, isChecked ->
-            baseViewModel.chooseFavorites(isChecked)
+            viewModel.chooseFavorites(isChecked)
         }
 
         progressBar.visibility = View.INVISIBLE
 
-        button.setOnClickListener{
-            button.isEnabled = false
-            progressBar.visibility = View.VISIBLE
-            baseViewModel.getJoke()
+        button.setOnClickListener {
+            viewModel.getJoke()
         }
 
-        baseViewModel.observe(this) { (text, drawableResId) ->
-            button.isEnabled = true
-            progressBar.visibility = View.INVISIBLE
-            textView.text = text
-            changeButton.setImageResource(drawableResId)
+        viewModel.observe(this) { state ->
+            state.show(
+                object :ShowView{
+                    override fun show(show: Boolean) {
+                        progressBar.visibility = if(show) View.VISIBLE else View.INVISIBLE
+                    }
+
+                },
+                object : EnableView {
+                    override fun enable(enable: Boolean) {
+                        button.isEnabled = enable
+                    }
+                },
+                object : ShowText {
+                    override fun show(text: String) {
+                        textView.text = text
+                    }
+
+                },
+                object : ShowImage {
+                    override fun show(id: Int) {
+                        changeButton.setImageResource(id)
+                    }
+
+                })
         }
     }
 }
