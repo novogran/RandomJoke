@@ -1,9 +1,5 @@
 package com.example.randomjoke
 
-import android.view.View
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.TextView
 import androidx.annotation.DrawableRes
 import androidx.lifecycle.*
 import kotlinx.coroutines.CoroutineDispatcher
@@ -33,34 +29,34 @@ class BaseViewModel(
         communication.observe(owner,observer)
 
     sealed class State {
-        abstract fun show(
+        fun show(
             process: ShowView,
             button: EnableView,
             textView: ShowText,
             imageButton: ShowImage
-        )
+        ){
+            show(process,button)
+            show(textView,imageButton)
+        }
+
+        protected open fun show(progress: ShowView,button: EnableView){}
+        protected open fun show(textView: ShowText,imageButton: ShowImage){}
 
         object Progress: State() {
-            override fun show(
-                process: ShowView,
-                button: EnableView,
-                textView: ShowText,
-                imageButton: ShowImage
-            ) {
-                process.show(true)
+            override fun show(progress: ShowView, button: EnableView) {
+                progress.show(true)
                 button.enable(false)
             }
         }
 
         class Initial(private val text:String, @DrawableRes private val id: Int): State(){
-            override fun show(
-                process: ShowView,
-                button: EnableView,
-                textView: ShowText,
-                imageButton: ShowImage
-            ) {
-                process.show(false)
-                button.enable(true)
+
+            override fun show(progress: ShowView, button: EnableView) {
+                progress.show(true)
+                button.enable(false)
+            }
+
+            override fun show(textView: ShowText, imageButton: ShowImage) {
                 textView.show(text)
                 imageButton.show(id)
             }
