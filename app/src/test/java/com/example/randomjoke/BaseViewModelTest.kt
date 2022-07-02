@@ -42,7 +42,7 @@ class BaseViewModelTest{
 
         val actualText = communication.text
         val actualId = communication.id
-        val expectedText = "no connection\n"
+        val expectedText = "no connection"
         val expectedId = 0
         assertEquals(expectedText,actualText)
         assertEquals(expectedId,actualId)
@@ -91,12 +91,10 @@ class BaseViewModelTest{
         var text = ""
         var id = -1
         var observerCount = 0
-        override fun showData(data: Pair<String, Int>) {
-            text = data.first
-            id = data.second
+        override fun showState(state: BaseViewModel.State) {
         }
 
-        override fun observe(owner: LifecycleOwner, observer: Observer<Pair<String, Int>>) {
+        override fun observe(owner: LifecycleOwner, observer: Observer<BaseViewModel.State>) {
             observerCount++
         }
 

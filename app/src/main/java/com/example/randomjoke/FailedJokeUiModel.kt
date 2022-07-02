@@ -1,5 +1,6 @@
 package com.example.randomjoke
 
-class FailedJokeUiModel(text: String): JokeUiModel(text, "") {
+class FailedJokeUiModel(private val text: String): JokeUiModel(text, "") {
+    override fun text() = text
     override fun getIconResId() = 0
 }
