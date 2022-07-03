@@ -19,7 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-    <com.example.randomjoke.CorrectTextView
+    <com.example.randomjoke.presentation.CorrectTextView
         android:padding="@dimen/padding"
         android:id="@+id/textView"
         android:layout_weight="1"
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:gravity="center"/>
 
-        <com.example.randomjoke.CorrectImageButton
+        <com.example.randomjoke.presentation.CorrectImageButton
             android:background="?selectableItemBackground"
             android:layout_gravity="center_vertical"
             android:id="@+id/changeButton"
@@ -37,13 +37,13 @@
 
     </LinearLayout>
 
-    <com.example.randomjoke.CorrectProgress
+    <com.example.randomjoke.presentation.CorrectProgress
         android:indeterminate="true"
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
-    <com.example.randomjoke.CorrectButton
+    <com.example.randomjoke.presentation.CorrectButton
         android:id="@+id/actionButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
