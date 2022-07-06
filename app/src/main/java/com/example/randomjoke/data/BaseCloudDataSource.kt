@@ -1,14 +1,19 @@
 package com.example.randomjoke.data
 
+import com.example.randomjoke.core.Mapper
 import com.example.randomjoke.domain.NoConnectionException
 import com.example.randomjoke.domain.ServiceUnavailableException
+import retrofit2.Call
 import java.lang.Exception
 import java.net.UnknownHostException
 
-class BaseCloudDataSource(private val service: JokeService): CloudDataSource {
+abstract class BaseCloudDataSource<T: Mapper<JokeDataModel>>: CloudDataSource {
+
+    protected abstract fun getJokeServerModel(): Call<T>
+
     override suspend fun getJoke(): JokeDataModel {
         try {
-            return service.getNewJoke().execute().body()!!.to()
+            return getJokeServerModel().execute().body()!!.to()
         } catch (e: Exception) {
             if (e is UnknownHostException) {
                 throw NoConnectionException()
