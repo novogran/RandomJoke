@@ -1,5 +1,6 @@
 package com.example.randomjoke.presentation
 
+import android.app.ProgressDialog.show
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -18,6 +19,21 @@ class MainActivity : AppCompatActivity() {
         val textView = findViewById<CorrectTextView>(R.id.textView)
         val checkBox = findViewById<CheckBox>(R.id.checkBox)
         val changeButton = findViewById<CorrectImageButton>(R.id.changeButton)
+        val favoriteDataView = findViewById<FavoriteDataView>(R.id.favoriteDataView)
+
+        favoriteDataView.listenChanges { isChecked ->
+            viewModel.chooseFavorites(isChecked)
+        }
+        favoriteDataView.handleChangeButton {
+            viewModel.changeJokeStatus()
+        }
+        favoriteDataView.handleActionButton {
+            viewModel.getJoke()
+        }
+
+        viewModel.observe(this) { state ->
+           favoriteDataView.show(state)
+        }
 
         changeButton.setOnClickListener {
             viewModel.changeJokeStatus()
@@ -36,5 +52,7 @@ class MainActivity : AppCompatActivity() {
         viewModel.observe(this) { state ->
             state.show(progressBar, button, textView, changeButton)
         }
+
+
     }
 }
