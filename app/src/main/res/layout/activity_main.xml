@@ -1,14 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     android:gravity="center">
 
     <com.example.randomjoke.presentation.FavoriteDataView
-        android:id="@+id/favoriteDataView"
+        android:id="@+id/jokeFavoriteDataView"
+        custom:chekBoxText="@string/show_favorite_joke"
+        custom:actionButtonText="@string/get_joke"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <com.example.randomjoke.presentation.FavoriteDataView
+        android:id="@+id/quoteFavoriteDataView"
+        custom:chekBoxText="@string/show_favorite_quote"
+        custom:actionButtonText="@string/get_quote"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 

@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <merge
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
+    xmlns:tools="http://schemas.android.com/tools">
 
     <CheckBox
         android:id="@+id/checkBox"
         android:padding="@dimen/padding"
-        android:text="@string/show_favorite_joke"
+        tools:text="@string/show_favorite_joke"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
@@ -45,5 +44,5 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:text="@string/get_joke"/>
+        tools:text="@string/get_joke"/>
 </merge>
