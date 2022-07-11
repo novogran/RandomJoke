@@ -1,11 +1,11 @@
 package com.example.randomjoke.domain
 
 
-class JokeFailureFactory(private val resourceManager: ResourceManager): JokeFailureHandler {
+class FailureFactory(private val resourceManager: ResourceManager): FailureHandler {
     override fun handle(e: Exception) =
         when (e){
             is NoConnectionException -> NoConnection(resourceManager)
-            is NoCachedJokesException -> NoCachedJokes(resourceManager)
+            is NoCachedJokesException -> NoCachedData(resourceManager)
             is ServiceUnavailableException -> ServiceUnavailable(resourceManager)
             else -> GenericError(resourceManager)
         }

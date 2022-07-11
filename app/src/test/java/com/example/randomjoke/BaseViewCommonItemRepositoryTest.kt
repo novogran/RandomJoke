@@ -2,8 +2,8 @@ package com.example.randomjoke
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import com.example.randomjoke.data.JokeDataModel
-import com.example.randomjoke.domain.JokeRepository
+import com.example.randomjoke.data.CommonDataModel
+import com.example.randomjoke.domain.CommonRepository
 import com.example.randomjoke.presentation.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.runBlocking
@@ -12,12 +12,12 @@ import org.junit.Assert.assertEquals
 import org.junit.Assert.assertNotEquals
 import org.junit.Test
 
-class BaseViewJokeRepositoryTest{
+class BaseViewCommonItemRepositoryTest{
 
     @ExperimentalCoroutinesApi
     @Test
     fun test_get_joke_from_cloud_success(): Unit = runBlocking {
-        val model = TestJokeRepository()
+        val model = TestCommonRepository()
         val communication = TestCommunication()
         val viewModel = BaseViewModel(,communication,TestCoroutineDispatcher())
 
@@ -35,7 +35,7 @@ class BaseViewJokeRepositoryTest{
     @ExperimentalCoroutinesApi
     @Test
     fun test_get_joke_from_cloud_fail(): Unit = runBlocking {
-        val model = TestJokeRepository()
+        val model = TestCommonRepository()
         val communication = TestCommunication()
         val viewModel = BaseViewModel(model,communication, TestCoroutineDispatcher())
 
@@ -51,17 +51,17 @@ class BaseViewJokeRepositoryTest{
         assertEquals(expectedId,actualId)
     }
 
-    private inner class TestJokeRepository : JokeRepository {
+    private inner class TestCommonRepository : CommonRepository {
 
-        private val cacheJokeUiModel = BaseJokeUiModel("cachedJokeText", "cachedJokePunchline")
-        private val cachedJokeFailure = FailedJokeUiModel("cacheFailed")
-        private val cloudJokeUiModel = BaseJokeUiModel("cloudJokeText", "cloudJokePunchline")
-        private val cloudJokeFailure = FailedJokeUiModel("no connection")
+        private val cacheJokeUiModel = BaseCommonUiModel("cachedJokeText", "cachedJokePunchline")
+        private val cachedJokeFailure = FailedCommonUiModel("cacheFailed")
+        private val cloudJokeUiModel = BaseCommonUiModel("cloudJokeText", "cloudJokePunchline")
+        private val cloudJokeFailure = FailedCommonUiModel("no connection")
         var success: Boolean = false
         private var getFromCache = false
-        private var cachedJoke: JokeDataModel? = null
+        private var cachedJoke: CommonDataModel? = null
 
-        override suspend fun getJoke(): JokeDataModel? {
+        override suspend fun getCommonItem(): CommonDataModel? {
             return if(success) {
                 if (getFromCache){
                     cacheJokeUiModel.also {
@@ -82,7 +82,7 @@ class BaseViewJokeRepositoryTest{
             }
         }
 
-        override suspend fun changeJokeStatus(): JokeDataModel
+        override suspend fun changeStatus(): CommonDataModel
 
         override fun chooseDataSource(cached: Boolean) {
             getFromCache = cached

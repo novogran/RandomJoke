@@ -50,6 +50,9 @@ class FavoriteDataView : LinearLayout {
             }
         }
     }
+    fun linkWith(viewModel: T){
+
+    }
 
     fun listenChanges(block:(checked: Boolean) -> Unit) =
         checkBox.setOnCheckedChangeListener { _, isChecked ->

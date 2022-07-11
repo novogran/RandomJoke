@@ -2,13 +2,10 @@ package com.example.randomjoke.presentation
 
 
 import android.app.Application
-import com.example.randomjoke.domain.BaseResourceManager
-import com.example.randomjoke.JokeRealmMapper
-import com.example.randomjoke.JokeSuccessMapper
+import com.example.randomjoke.CommonRealmMapper
+import com.example.randomjoke.CommonSuccessMapper
 import com.example.randomjoke.data.*
-import com.example.randomjoke.domain.BaseJokeInteractor
-import com.example.randomjoke.domain.BaseJokeRepository
-import com.example.randomjoke.domain.JokeFailureFactory
+import com.example.randomjoke.domain.*
 import io.realm.Realm
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -18,6 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 class JokeApp: Application() {
 
     lateinit var viewModel: BaseViewModel
+    lateinit var quoteViewModel : BaseViewModel
 
     override fun onCreate() {
         super.onCreate()
@@ -32,14 +30,36 @@ class JokeApp: Application() {
             .addConverterFactory(GsonConverterFactory.create())
             .build()
 
-        val cacheDataSource = BaseCacheDataSource(BaseRealmProvide(), JokeRealmMapper())
+        val cacheDataSource = BaseCacheDataSource(BaseRealmProvide(), CommonRealmMapper())
         val resourceManager = BaseResourceManager(this)
-        val cloudDataSource = NewJokeCloudDataSource(retrofit.create(NewJokeService::class.java))
-        val repository = BaseJokeRepository(cacheDataSource,cloudDataSource,BaseCachedJoke())
-        val interactor = BaseJokeInteractor(repository,
-            JokeFailureFactory(resourceManager), JokeSuccessMapper()
+        val cloudDataSource = NewCloudDataSource(retrofit.create(NewJokeService::class.java))
+        val repository = BaseRepository(cacheDataSource,cloudDataSource,BaseCachedData())
+        val interactor = BaseInteractor(repository,
+            FailureFactory(resourceManager), CommonSuccessMapper()
         )
         viewModel = BaseViewModel(interactor, BaseCommunication())
+        quoteViewModel = BaseViewModel(
+            BaseInteractor(
+                BaseRepository(
+            object : CacheDataSource {
+                override suspend fun getData(): CommonDataModel {
+                    TODO("Not yet implemented")
+                }
+
+                override suspend fun addOrRemove(
+                    id: Int,
+                    joke: CommonDataModel
+                ): CommonDataModel {
+                    TODO("Not yet implemented")
+                }
+            },
+                    object : CloudDataSource {
+                        override suspend fun getData(): CommonDataModel {
+                            TODO("Not yet implemented")
+                        }
+                    }, BaseCachedData()
+            ), failureHandler, mapper
+        ),BaseCommunication())
     }
 
 

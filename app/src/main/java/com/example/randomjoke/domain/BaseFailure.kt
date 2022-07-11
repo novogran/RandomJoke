@@ -2,7 +2,7 @@ package com.example.randomjoke.domain
 
 import androidx.annotation.StringRes
 
-abstract class BaseJokeFailure(private val resourceManager: ResourceManager): JokeFailure {
+abstract class BaseFailure(private val resourceManager: ResourceManager): Failure {
     @StringRes
     protected abstract fun getMessageResId(): Int
 

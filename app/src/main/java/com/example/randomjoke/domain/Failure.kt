@@ -1,6 +1,6 @@
 package com.example.randomjoke.domain
 
-interface JokeFailure {
+interface Failure {
 
     fun getMessage(): String
 }
