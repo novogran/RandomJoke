@@ -50,20 +50,23 @@ class FavoriteDataView : LinearLayout {
             }
         }
     }
-    fun linkWith(viewModel: T){
 
+    fun linkWith(model:BaseViewModel){
+        listenChanges { isChecked -> model.chooseFavorites(isChecked) }
+        handleChangeButton { model.changeItemStatus() }
+        handleActionButton { model.getItem() }
     }
 
-    fun listenChanges(block:(checked: Boolean) -> Unit) =
+    private fun listenChanges(block:(checked: Boolean) -> Unit) =
         checkBox.setOnCheckedChangeListener { _, isChecked ->
             block.invoke(isChecked)
         }
 
-    fun handleChangeButton(block:() -> Unit) = changeButton.setOnClickListener {
+    private fun handleChangeButton(block:() -> Unit) = changeButton.setOnClickListener {
         block.invoke()
     }
 
-    fun handleActionButton(block: () -> Unit) = actionButton.setOnClickListener {
+    private fun handleActionButton(block: () -> Unit) = actionButton.setOnClickListener {
         block.invoke()
     }
 

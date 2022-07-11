@@ -1,6 +1,7 @@
 package com.example.randomjoke.domain
 
 import com.example.randomjoke.core.Mapper
+import com.example.randomjoke.core.presentation.Failure
 import com.example.randomjoke.presentation.*
 
 sealed class CommonItem: Mapper<CommonUiModel>{

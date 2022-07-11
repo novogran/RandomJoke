@@ -1,6 +1,8 @@
 package com.example.randomjoke.data
 
-import com.example.randomjoke.CommonDataModelMapper
+import com.example.randomjoke.core.data.CommonDataModelMapper
+import com.example.randomjoke.core.data.ChangeCommonItem
+import com.example.randomjoke.core.data.ChangeStatus
 
 
 class CommonDataModel (
