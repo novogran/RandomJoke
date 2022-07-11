@@ -10,9 +10,9 @@ interface JokeService<T: Mapper<CommonDataModel>> {
      fun getJoke(): Call<T>
 }
 
-interface NewJokeService: JokeService<NewJokeServerModel> {
+interface NewJokeService {
     @GET("https://v2.jokeapi.dev/joke/Any")
-    override fun getJoke(): Call<NewJokeServerModel>
+    fun getJoke(): Call<NewJokeServerModel>
 }
 
 interface BaseJokeService: JokeService<JokeServerModel>{
