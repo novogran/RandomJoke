@@ -2,9 +2,9 @@ package com.example.randomjoke.presentation
 
 import androidx.annotation.DrawableRes
 
-abstract class JokeUiModel(private val text: String, private val punchline: String) {
+abstract class CommonUiModel(private val first: String, private val second: String) {
 
-    protected open fun text() = "$text\n$punchline"
+    protected open fun text() = "$first\n$second"
 
     @DrawableRes
     abstract fun getIconResId(): Int

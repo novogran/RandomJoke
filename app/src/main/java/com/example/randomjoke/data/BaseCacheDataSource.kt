@@ -7,10 +7,10 @@ import kotlinx.coroutines.withContext
 
 class BaseCacheDataSource(
     private val realmProvider: RealmProvider,
-    private val mapper: JokeDataModelMapper<JokeRealmModel>
+    private val mapper: CommonDataModelMapper<JokeRealmModel>
 ): CacheDataSource {
     
-    override suspend fun addOrRemove(id: Int, joke: JokeDataModel): JokeDataModel =
+    override suspend fun addOrRemove(id: Int, joke: CommonDataModel): CommonDataModel =
         withContext(Dispatchers.IO) {
             realmProvider.provide().use{
                 val jokeRealm =
@@ -30,7 +30,7 @@ class BaseCacheDataSource(
             }
     }
 
-    override suspend fun getJoke(): JokeDataModel {
+    override suspend fun getData(): CommonDataModel {
         realmProvider.provide().use {
             val jokes = it.where(JokeRealmModel::class.java).findAll()
             if(jokes.isEmpty())

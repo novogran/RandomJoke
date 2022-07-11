@@ -1,3 +1,3 @@
 package com.example.randomjoke.data
 
-interface CacheDataSource: JokeDataFetcher, ChangeJokeStatus
+interface CacheDataSource: DataFetcher, ChangeStatus
