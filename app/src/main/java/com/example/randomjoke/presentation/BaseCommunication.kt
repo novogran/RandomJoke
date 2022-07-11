@@ -3,6 +3,7 @@ package com.example.randomjoke.presentation
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import com.example.randomjoke.core.presentation.Communication
 
 class BaseCommunication: Communication {
     private val liveData = MutableLiveData<State>()

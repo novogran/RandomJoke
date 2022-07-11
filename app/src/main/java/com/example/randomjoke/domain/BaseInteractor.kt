@@ -1,6 +1,9 @@
 package com.example.randomjoke.domain
 
-import com.example.randomjoke.*
+import com.example.randomjoke.core.data.CommonDataModelMapper
+import com.example.randomjoke.core.data.CommonRepository
+import com.example.randomjoke.core.domain.CommonInteractor
+import com.example.randomjoke.core.domain.FailureHandler
 import java.lang.Exception
 
 class BaseInteractor(

@@ -1,6 +1,7 @@
 package com.example.randomjoke.presentation
 
 import androidx.annotation.DrawableRes
+import com.example.randomjoke.core.presentation.Communication
 
 abstract class CommonUiModel(private val first: String, private val second: String) {
 

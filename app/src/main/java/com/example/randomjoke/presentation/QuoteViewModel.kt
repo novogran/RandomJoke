@@ -3,6 +3,8 @@ package com.example.randomjoke.presentation
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import com.example.randomjoke.core.presentation.CommonViewModel
+import com.example.randomjoke.core.presentation.Communication
 
 class QuoteViewModel(private val communication: Communication): ViewModel(), CommonViewModel {
 
