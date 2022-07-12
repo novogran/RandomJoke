@@ -6,7 +6,7 @@ import io.realm.annotations.PrimaryKey
 
 open class QuoteRealmModel: RealmObject() {
     @PrimaryKey
-    var id: Int = -1
+    var id: String = ""
     var content: String = ""
     var author: String = ""
     fun to() = CommonDataModel(id,content,author,true)

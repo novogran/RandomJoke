@@ -6,7 +6,7 @@ import com.example.randomjoke.NewJokeServerModel
 import retrofit2.Call
 import retrofit2.http.GET
 
-interface JokeService<T: Mapper<CommonDataModel>> {
+interface JokeService<T: Mapper<CommonDataModel<Int>>> {
      fun getJoke(): Call<T>
 }
 
