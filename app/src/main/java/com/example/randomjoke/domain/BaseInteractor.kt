@@ -6,10 +6,10 @@ import com.example.randomjoke.core.domain.CommonInteractor
 import com.example.randomjoke.core.domain.FailureHandler
 import java.lang.Exception
 
-class BaseInteractor(
-    private val repository: CommonRepository,
+class BaseInteractor<E>(
+    private val repository: CommonRepository<E>,
     private val failureHandler: FailureHandler,
-    private val mapper: CommonDataModelMapper<CommonItem.Success>
+    private val mapper: CommonDataModelMapper<CommonItem.Success,E>
 ): CommonInteractor {
     override suspend fun getJoke(): CommonItem {
         return try{

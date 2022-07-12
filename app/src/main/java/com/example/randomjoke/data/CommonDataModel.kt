@@ -5,18 +5,18 @@ import com.example.randomjoke.core.data.ChangeCommonItem
 import com.example.randomjoke.core.data.ChangeStatus
 
 
-class CommonDataModel (
-    private val id: Int,
+class CommonDataModel<E> (
+    private val id: E,
     private val firstText: String,
     private val secondText: String,
     private val cached: Boolean = false
-): ChangeCommonItem {
+): ChangeCommonItem<E> {
 
-    fun <T> map(mapper: CommonDataModelMapper<T>):T {
+    fun <T> map(mapper: CommonDataModelMapper<T,E>):T {
         return mapper.map(id, firstText, secondText, cached)
     }
 
-    override suspend fun change(changeStatus: ChangeStatus) =
+    override suspend fun change(changeStatus: ChangeStatus<E>) =
         changeStatus.addOrRemove(id,this)
 
     fun changeCached(cached: Boolean) =
