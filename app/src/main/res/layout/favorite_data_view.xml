@@ -36,6 +36,7 @@
     <com.example.randomjoke.presentation.CorrectProgress
         android:indeterminate="true"
         android:id="@+id/progressBar"
+        android:visibility="invisible"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
