@@ -1,9 +1,10 @@
 package com.example.randomjoke.presentation
 
 import androidx.annotation.DrawableRes
+import com.example.randomjoke.CommonDataRecyclerAdapter
 import com.example.randomjoke.core.presentation.Communication
 
-abstract class CommonUiModel(private val first: String, private val second: String) {
+abstract class CommonUiModel<T>(private val first: String, private val second: String) {
 
     protected open fun text() = "$first\n$second"
 
@@ -14,4 +15,8 @@ abstract class CommonUiModel(private val first: String, private val second: Stri
         State.Initial(text(), getIconResId())
     )
     fun show(showText: ShowText) = showText.show(text())
+
+    open fun change(listener: CommonDataRecyclerAdapter.FavoriteItemClickListener<T>) = Unit
+
+    open fun matches(id:T): Boolean = false
 }

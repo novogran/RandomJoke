@@ -1,7 +1,15 @@
 package com.example.randomjoke.presentation
 
+import com.example.randomjoke.CommonDataRecyclerAdapter
 import com.example.randomjoke.R
 
-class FavoriteCommonUiModel(text: String, punchline: String): CommonUiModel(text,punchline) {
+class FavoriteCommonUiModel<E>(private val id:E,text: String, punchline: String):
+    CommonUiModel<E>(text,punchline) {
+
+    override fun change(listener: CommonDataRecyclerAdapter.FavoriteItemClickListener<E>) =
+        listener.change(id)
+
     override fun getIconResId() = R.drawable.baseline_favorite_24
+
+    override fun matches(id: E): Boolean = this.id == id
 }

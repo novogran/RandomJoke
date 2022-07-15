@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.randomjoke.CommonDataRecyclerAdapter
 import com.example.randomjoke.R
 import com.example.randomjoke.data.CommonDataModel
+import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
@@ -29,7 +30,18 @@ class MainActivity : AppCompatActivity() {
         }
 
         val recycleView = findViewById<RecyclerView>(R.id.recycleView)
-        val adapter = CommonDataRecyclerAdapter<Int>()
+        val adapter = CommonDataRecyclerAdapter(object :
+            CommonDataRecyclerAdapter.FavoriteItemClickListener<Int>{
+            override fun change(id: Int) {
+                Snackbar.make(
+                    favoriteDataView,
+                    R.string.remove_from_favorites,
+                    Snackbar.LENGTH_SHORT
+                ).setAction(R.string.yes){
+                    viewModel.changeItemStatus(id)
+                }.show()
+            }
+        })
         recycleView.adapter = adapter
         viewModel.observeList(this) { list ->
             adapter.show(list)
