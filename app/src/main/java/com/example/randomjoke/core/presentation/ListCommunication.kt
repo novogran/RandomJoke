@@ -4,9 +4,11 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
 import com.example.randomjoke.presentation.CommonUiModel
 
-interface ListCommunication {
+interface ListCommunication<T> {
 
-    fun showDataList(list: List<CommonUiModel>)
+    fun showDataList(list: List<CommonUiModel<T>>)
 
-    fun observeList(owner: LifecycleOwner, observer: Observer<List<CommonUiModel>>)
+    fun observeList(owner: LifecycleOwner, observer: Observer<List<CommonUiModel<T>>>)
+
+    fun removeItem(id: T)
 }

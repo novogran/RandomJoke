@@ -9,11 +9,11 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class BaseViewModel(
+class BaseViewModel<T>(
     private val interactor: CommonInteractor,
-    private val communication: CommonCommunication,
+    private val communication: CommonCommunication<T>,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
-    ): ViewModel(), CommonViewModel {
+    ): ViewModel(), CommonViewModel<T> {
 
     override fun getItem() {
         viewModelScope.launch(dispatcher) {
@@ -28,10 +28,13 @@ class BaseViewModel(
         }
     }
 
-    override fun changeItemStatus() {
+    override fun changeItemStatus(id:T) {
+        communication.removeItem(id)
         viewModelScope.launch(dispatcher) {
+            interactor.removeItem(id)
             if (communication.isState(State.INITIAL))
                 interactor.changeFavorites().to().show(communication)
+                communication.showDataList(interactor.getItemList().toUiList())
         }
     }
 
@@ -40,9 +43,9 @@ class BaseViewModel(
     override fun observe(owner: LifecycleOwner, observer: Observer<State>) =
         communication.observe(owner, observer)
 
-    override fun observeList(owner: LifecycleOwner, observer: Observer<List<CommonUiModel>>) {
+    override fun observeList(owner: LifecycleOwner, observer: Observer<List<CommonUiModel<T>>>) {
         communication.observeList(owner,observer)
     }
 
-    fun List<CommonItem>.toUiList() = map{it.to()}
+    fun List<CommonItem<T>>.toUiList() = map{it.to()}
 }

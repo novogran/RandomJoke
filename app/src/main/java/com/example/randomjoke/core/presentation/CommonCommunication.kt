@@ -1,4 +1,4 @@
 package com.example.randomjoke.core.presentation
 
-interface CommonCommunication:Communication,ListCommunication {
+interface CommonCommunication<T>:Communication,ListCommunication<T> {
 }
