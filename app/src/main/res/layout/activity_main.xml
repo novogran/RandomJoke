@@ -6,18 +6,28 @@
     android:orientation="vertical"
     android:gravity="center">
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recycleView"
+        custom:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
     <com.example.randomjoke.presentation.FavoriteDataView
         android:id="@+id/jokeFavoriteDataView"
         custom:chekBoxText="@string/show_favorite_joke"
         custom:actionButtonText="@string/get_joke"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
     <com.example.randomjoke.presentation.FavoriteDataView
         android:id="@+id/quoteFavoriteDataView"
         custom:chekBoxText="@string/show_favorite_quote"
         custom:actionButtonText="@string/get_quote"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"/>
 
 </LinearLayout>

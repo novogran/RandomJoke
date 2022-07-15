@@ -3,7 +3,10 @@ package com.example.randomjoke.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.RecyclerView
+import com.example.randomjoke.CommonDataRecyclerAdapter
 import com.example.randomjoke.R
+import com.example.randomjoke.data.CommonDataModel
 
 class MainActivity : AppCompatActivity() {
 
@@ -25,7 +28,12 @@ class MainActivity : AppCompatActivity() {
             quoteFavoriteDataView.show(state)
         }
 
-
-
+        val recycleView = findViewById<RecyclerView>(R.id.recycleView)
+        val adapter = CommonDataRecyclerAdapter<Int>()
+        recycleView.adapter = adapter
+        viewModel.observeList(this) { list ->
+            adapter.show(list)
+        }
+        viewModel.getItemList()
     }
 }

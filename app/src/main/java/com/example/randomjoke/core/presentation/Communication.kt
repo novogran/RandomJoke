@@ -2,6 +2,7 @@ package com.example.randomjoke.core.presentation
 
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
+import com.example.randomjoke.presentation.CommonUiModel
 import com.example.randomjoke.presentation.State
 
 interface Communication {
