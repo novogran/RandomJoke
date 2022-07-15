@@ -2,22 +2,29 @@ package com.example.randomjoke.presentation
 
 import androidx.lifecycle.*
 import com.example.randomjoke.core.domain.CommonInteractor
+import com.example.randomjoke.core.presentation.CommonCommunication
 import com.example.randomjoke.core.presentation.CommonViewModel
-import com.example.randomjoke.core.presentation.Communication
+import com.example.randomjoke.domain.CommonItem
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class BaseViewModel(
     private val interactor: CommonInteractor,
-    private val communication: Communication,
+    private val communication: CommonCommunication,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
     ): ViewModel(), CommonViewModel {
 
     override fun getItem() {
         viewModelScope.launch(dispatcher) {
             communication.showState(State.Progress)
-            interactor.getJoke().to().show(communication)
+            interactor.getItem().to().show(communication)
+        }
+    }
+
+    override fun getItemList() {
+        viewModelScope.launch(dispatcher) {
+            communication.showDataList(interactor.getItemList().toUiList())
         }
     }
 
@@ -32,4 +39,10 @@ class BaseViewModel(
 
     override fun observe(owner: LifecycleOwner, observer: Observer<State>) =
         communication.observe(owner, observer)
+
+    override fun observeList(owner: LifecycleOwner, observer: Observer<List<CommonUiModel>>) {
+        communication.observeList(owner,observer)
+    }
+
+    fun List<CommonItem>.toUiList() = map{it.to()}
 }

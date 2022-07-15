@@ -32,6 +32,9 @@ class BaseRepository<E>(
         }
     }
 
-    override suspend fun changeStatus(): CommonDataModel<E> =
-        cached.change(cacheDataSource)
+    override suspend fun getCommonItemList(): List<CommonDataModel<E>> = withContext(Dispatchers.IO) {
+        cacheDataSource.getDataList()
+    }
+
+    override suspend fun changeStatus(): CommonDataModel<E> = cached.change(cacheDataSource)
 }

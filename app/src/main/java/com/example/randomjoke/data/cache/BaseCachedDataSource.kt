@@ -1,5 +1,6 @@
 package com.example.randomjoke.data.cache
 
+import androidx.lifecycle.Transformations.map
 import com.example.randomjoke.core.data.CommonDataModelMapper
 import com.example.randomjoke.core.data.cache.CacheDataSource
 import com.example.randomjoke.core.data.cache.RealmProvider
@@ -8,6 +9,7 @@ import com.example.randomjoke.core.domain.NoCachedDataException
 import com.example.randomjoke.data.CommonDataModel
 import io.realm.Realm
 import io.realm.RealmObject
+import io.realm.RealmResults
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 
@@ -40,13 +42,20 @@ abstract class BaseCachedDataSource<T: RealmObject,E>(
             }
     }
 
-    override suspend fun getData(): CommonDataModel<E> {
+    private fun <R> getRealmData(block : (list: RealmResults<T>) -> R): R{
         realmProvider.provide().use {
             val list = it.where(dbClass).findAll()
             if(list.isEmpty())
                 throw NoCachedDataException()
             else
-                return realmToCommonDataMapper.map(list.random())
-                }
+                return block.invoke(list)
         }
     }
+
+    override suspend fun getData() = getRealmData { realmToCommonDataMapper.map(it.random()) }
+
+    override suspend fun getDataList() = getRealmData { results ->
+        results.map { realmToCommonDataMapper.map(it) }
+    }
+
+}

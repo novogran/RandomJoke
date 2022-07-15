@@ -13,4 +13,5 @@ abstract class CommonUiModel(private val first: String, private val second: Stri
     open fun show(communication: Communication) = communication.showState(
         State.Initial(text(), getIconResId())
     )
+    fun show(showText: ShowText) = showText.show(text())
 }
