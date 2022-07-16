@@ -10,7 +10,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class BaseViewModel<T>(
-    private val interactor: CommonInteractor,
+    private val interactor: CommonInteractor<T>,
     private val communication: CommonCommunication<T>,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
     ): ViewModel(), CommonViewModel<T> {
@@ -28,14 +28,20 @@ class BaseViewModel<T>(
         }
     }
 
-    override fun changeItemStatus(id:T) {
-        communication.removeItem(id)
+    override fun changeItemStatus() {
         viewModelScope.launch(dispatcher) {
-            interactor.removeItem(id)
             if (communication.isState(State.INITIAL))
                 interactor.changeFavorites().to().show(communication)
                 communication.showDataList(interactor.getItemList().toUiList())
         }
+    }
+
+    override fun changeItemStatus(id: T): Int {
+        val position = communication.removeItem(id)
+        viewModelScope.launch(dispatcher) {
+            interactor.removeItem(id)
+        }
+        return position
     }
 
     override fun chooseFavorites(favorites: Boolean) = interactor.getFavorites(favorites)
@@ -47,5 +53,6 @@ class BaseViewModel<T>(
         communication.observeList(owner,observer)
     }
 
-    fun List<CommonItem<T>>.toUiList() = map{it.to()}
+    fun <T> List<CommonItem<T>>.toUiList() = map{it.to()}
+
 }

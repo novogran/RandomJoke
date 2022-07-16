@@ -5,24 +5,19 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.example.randomjoke.core.presentation.CommonCommunication
 import com.example.randomjoke.presentation.CommonUiModel
 import com.example.randomjoke.presentation.CorrectImageButton
 import com.example.randomjoke.presentation.CorrectTextView
 import com.example.randomjoke.presentation.FailedCommonUiModel
 
-class CommonDataRecyclerAdapter<T>(private val listener: FavoriteItemClickListener<T>):
+class CommonDataRecyclerAdapter<T>(
+    private val listener: FavoriteItemClickListener<T>,
+    private val communication: CommonCommunication<T>
+    ):
     RecyclerView.Adapter<CommonDataRecyclerAdapter.CommonDataViewHolder<T>>(){
 
-    private val list = ArrayList<CommonUiModel<T>>()
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun show(data:List<CommonUiModel<T>>){
-        list.clear()
-        list.addAll(data)
-        notifyDataSetChanged()
-    }
-
-    override fun getItemViewType(position: Int) = when(list[position]){
+    override fun getItemViewType(position: Int) = when(communication.getList()[position]){
         is FailedCommonUiModel -> 0
         else -> 1
     }
@@ -40,10 +35,22 @@ class CommonDataRecyclerAdapter<T>(private val listener: FavoriteItemClickListen
     }
 
     override fun onBindViewHolder(holder: CommonDataViewHolder<T>, position: Int) {
-        holder.bind(list[position])
+        holder.bind(communication.getList()[position])
     }
 
-    override fun getItemCount() = list.size
+    override fun getItemCount() = communication.getList().size
+
+    fun update(){
+        notifyDataSetChanged()
+    }
+
+    fun update(pair:Pair<Boolean,Int>){
+        if(pair.first){
+            notifyItemInserted(pair.second)
+        } else {
+            notifyItemRemoved(pair.second)
+        }
+    }
 
     abstract class CommonDataViewHolder<T>(view: View): RecyclerView.ViewHolder(view){
         private val textView = itemView.findViewById<CorrectTextView>(R.id.commonDataTextView)

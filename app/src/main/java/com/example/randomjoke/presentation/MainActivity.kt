@@ -11,11 +11,14 @@ import com.google.android.material.snackbar.Snackbar
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var adapter: CommonDataRecyclerAdapter<Int>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
         val viewModel = (application as JokeApp).viewModel
+        val jokeCommunication = (application as JokeApp).jokeCommunication
         val favoriteDataView = findViewById<FavoriteDataView>(R.id.jokeFavoriteDataView)
         favoriteDataView.linkWith(viewModel)
         viewModel.observe(this) { state ->
@@ -30,7 +33,10 @@ class MainActivity : AppCompatActivity() {
         }
 
         val recycleView = findViewById<RecyclerView>(R.id.recycleView)
-        val adapter = CommonDataRecyclerAdapter(object :
+        val observer: (t:List<CommonUiModel<Int>>) -> Unit = { _ ->
+            adapter.update()
+        }
+        adapter = CommonDataRecyclerAdapter(object :
             CommonDataRecyclerAdapter.FavoriteItemClickListener<Int>{
             override fun change(id: Int) {
                 Snackbar.make(
@@ -38,14 +44,13 @@ class MainActivity : AppCompatActivity() {
                     R.string.remove_from_favorites,
                     Snackbar.LENGTH_SHORT
                 ).setAction(R.string.yes){
-                    viewModel.changeItemStatus(id)
+                    val position = viewModel.changeItemStatus(id)
+                    adapter.update(Pair(false,position))
                 }.show()
             }
-        })
+        }, jokeCommunication)
         recycleView.adapter = adapter
-        viewModel.observeList(this) { list ->
-            adapter.show(list)
-        }
+        viewModel.observeList(this,observer)
         viewModel.getItemList()
     }
 }
