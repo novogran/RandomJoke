@@ -21,8 +21,9 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 class JokeApp: Application() {
 
-    lateinit var viewModel: BaseViewModel
-    lateinit var quoteViewModel : BaseViewModel
+    lateinit var viewModel: BaseViewModel<Int>
+    lateinit var quoteViewModel : BaseViewModel<String>
+    lateinit var jokeCommunication: BaseCommunication<Int>
 
     override fun onCreate() {
         super.onCreate()

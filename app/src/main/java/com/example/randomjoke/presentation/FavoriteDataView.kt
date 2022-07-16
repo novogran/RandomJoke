@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import com.example.randomjoke.R
+import com.example.randomjoke.core.presentation.CommonItemViewModel
+import com.example.randomjoke.core.presentation.CommonViewModel
 
 class FavoriteDataView : LinearLayout {
 
@@ -51,23 +53,17 @@ class FavoriteDataView : LinearLayout {
         }
     }
 
-    fun linkWith(model:BaseViewModel){
-        listenChanges { isChecked -> model.chooseFavorites(isChecked) }
-        handleChangeButton { model.changeItemStatus() }
-        handleActionButton { model.getItem() }
-    }
-
-    private fun listenChanges(block:(checked: Boolean) -> Unit) =
-        checkBox.setOnCheckedChangeListener { _, isChecked ->
-            block.invoke(isChecked)
+    fun linkWith(commonViewModel: CommonItemViewModel){
+        checkBox.setOnCheckedChangeListener{ _,isChecked ->
+            commonViewModel.chooseFavorites(isChecked)
+        }
+        changeButton.setOnClickListener{
+            commonViewModel.changeItemStatus()
+        }
+        actionButton.setOnClickListener{
+            commonViewModel.getItem()
         }
 
-    private fun handleChangeButton(block:() -> Unit) = changeButton.setOnClickListener {
-        block.invoke()
-    }
-
-    private fun handleActionButton(block: () -> Unit) = actionButton.setOnClickListener {
-        block.invoke()
     }
 
     fun show(state: State) = state.show(progress,actionButton,textView,changeButton)

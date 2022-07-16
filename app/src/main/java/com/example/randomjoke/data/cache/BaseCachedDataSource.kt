@@ -1,6 +1,5 @@
 package com.example.randomjoke.data.cache
 
-import androidx.lifecycle.Transformations.map
 import com.example.randomjoke.core.data.CommonDataModelMapper
 import com.example.randomjoke.core.data.cache.CacheDataSource
 import com.example.randomjoke.core.data.cache.RealmProvider
@@ -56,6 +55,14 @@ abstract class BaseCachedDataSource<T: RealmObject,E>(
 
     override suspend fun getDataList() = getRealmData { results ->
         results.map { realmToCommonDataMapper.map(it) }
+    }
+
+    override suspend fun remove(id: E) = withContext(Dispatchers.IO) {
+        realmProvider.provide().use { realm ->
+            realm.executeTransaction{
+                findRealmObject(realm, id)?.deleteFromRealm()
+            }
+        }
     }
 
 }

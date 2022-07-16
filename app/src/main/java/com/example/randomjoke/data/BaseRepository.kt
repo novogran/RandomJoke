@@ -28,6 +28,7 @@ class BaseRepository<E>(
             cached.save(data)
             return@withContext data
         } catch (e: Exception){
+            cached.clear()
             throw e
         }
     }
@@ -37,4 +38,8 @@ class BaseRepository<E>(
     }
 
     override suspend fun changeStatus(): CommonDataModel<E> = cached.change(cacheDataSource)
+
+    override suspend fun removeItem(id: E) {
+        cacheDataSource.remove(id)
+    }
 }

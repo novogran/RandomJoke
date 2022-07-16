@@ -11,4 +11,6 @@ interface CommonRepository<E> {
     suspend fun changeStatus(): CommonDataModel<E>
 
     fun chooseDataSource(cached: Boolean)
+
+    suspend fun removeItem(id:E)
 }
