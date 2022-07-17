@@ -1,33 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:custom="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    android:gravity="center">
+    android:orientation="vertical">
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleView"
-        custom:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        />
+        android:layout_height="wrap_content"/>
 
-    <com.example.randomjoke.presentation.FavoriteDataView
-        android:id="@+id/jokeFavoriteDataView"
-        custom:chekBoxText="@string/show_favorite_joke"
-        custom:actionButtonText="@string/get_joke"
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/viewPager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
-
-    <com.example.randomjoke.presentation.FavoriteDataView
-        android:id="@+id/quoteFavoriteDataView"
-        custom:chekBoxText="@string/show_favorite_quote"
-        custom:actionButtonText="@string/get_quote"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="1"/>
+        android:layout_height="match_parent"
+        android:orientation="horizontal"/>
 
 </LinearLayout>
