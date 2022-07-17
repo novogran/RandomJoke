@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.CheckBox
 import android.widget.LinearLayout
+import androidx.annotation.StringRes
 import com.example.randomjoke.R
 import com.example.randomjoke.core.presentation.CommonItemViewModel
 import com.example.randomjoke.core.presentation.CommonViewModel
@@ -67,4 +68,7 @@ class FavoriteDataView : LinearLayout {
     }
 
     fun show(state: State) = state.show(progress,actionButton,textView,changeButton)
+
+    fun checkBoxText(@StringRes id:Int) = checkBox.setText(id)
+    fun actionButtonText(@StringRes id:Int) = actionButton.setText(id)
 }
