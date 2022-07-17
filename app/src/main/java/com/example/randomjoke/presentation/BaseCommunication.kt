@@ -3,11 +3,17 @@ package com.example.randomjoke.presentation
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.DiffUtil
+import com.example.randomjoke.CommonDiffUtilCallback
 import com.example.randomjoke.core.presentation.CommonCommunication
 import com.example.randomjoke.core.presentation.Communication
 
 class BaseCommunication<T>: CommonCommunication<T> {
+
+    private lateinit var diffResult: DiffUtil.DiffResult
     private val liveData = MutableLiveData<State>()
+
+    override fun getDiffResult() = diffResult
 
     override fun showState(state: State) {
         liveData.value = state
@@ -16,6 +22,8 @@ class BaseCommunication<T>: CommonCommunication<T> {
     private val listLiveData = MutableLiveData<ArrayList<CommonUiModel<T>>>()
 
     override fun showDataList(list: List<CommonUiModel<T>>) {
+        val callback = CommonDiffUtilCallback(listLiveData.value?: emptyList(),list)
+        diffResult = DiffUtil.calculateDiff(callback)
         listLiveData.value = ArrayList(list)
     }
 
@@ -29,17 +37,6 @@ class BaseCommunication<T>: CommonCommunication<T> {
 
     override fun isState(type: Int) =
         liveData.value?.isType(type)?: false
-
-    override fun removeItem(id: T): Int {
-        val found = listLiveData.value?.find {
-            it.matches(id)
-        }
-        val position = listLiveData.value?.indexOf(found)?: -1
-        found?.let {
-            listLiveData.value?.remove(it)
-        }
-        return position
-    }
 
     override fun getList(): List<CommonUiModel<T>> {
         return listLiveData.value?: emptyList()

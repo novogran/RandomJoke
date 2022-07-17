@@ -6,7 +6,7 @@ import com.example.randomjoke.presentation.CommonUiModel
 import com.example.randomjoke.presentation.State
 
 interface CommonViewModel<T>: CommonItemViewModel {
-    fun changeItemStatus(id:T): Int
+    fun changeItemStatus(id:T)
     fun observe(owner: LifecycleOwner, observer: Observer<State>)
     fun observeList(owner: LifecycleOwner, observer: Observer<List<CommonUiModel<T>>>)
 }

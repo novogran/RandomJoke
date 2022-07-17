@@ -51,7 +51,8 @@ class JokeApp: Application() {
         val quoteRepository = BaseRepository(quoteCacheDataSource,quoteCloudDataSource,BaseCachedData<String>())
         val jokeInteractor = BaseInteractor(jokeRepository,failureHandler, mapper)
         val quoteInteractor = BaseInteractor(quoteRepository, failureHandler, quoteMapper)
-        viewModel = BaseViewModel(jokeInteractor, BaseCommunication())
+        jokeCommunication = BaseCommunication()
+        viewModel = BaseViewModel(jokeInteractor, jokeCommunication)
         quoteViewModel = BaseViewModel(quoteInteractor,BaseCommunication())
     }
 }

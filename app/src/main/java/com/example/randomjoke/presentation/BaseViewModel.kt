@@ -24,7 +24,7 @@ class BaseViewModel<T>(
 
     override fun getItemList() {
         viewModelScope.launch(dispatcher) {
-            communication.showDataList(interactor.getItemList().toUiList())
+            showList()
         }
     }
 
@@ -32,16 +32,15 @@ class BaseViewModel<T>(
         viewModelScope.launch(dispatcher) {
             if (communication.isState(State.INITIAL))
                 interactor.changeFavorites().to().show(communication)
-                communication.showDataList(interactor.getItemList().toUiList())
+                showList()
         }
     }
 
-    override fun changeItemStatus(id: T): Int {
-        val position = communication.removeItem(id)
+    override fun changeItemStatus(id: T) {
         viewModelScope.launch(dispatcher) {
             interactor.removeItem(id)
+            showList()
         }
-        return position
     }
 
     override fun chooseFavorites(favorites: Boolean) = interactor.getFavorites(favorites)
@@ -54,5 +53,7 @@ class BaseViewModel<T>(
     }
 
     fun <T> List<CommonItem<T>>.toUiList() = map{it.to()}
+
+    private suspend fun showList() = communication.showDataList(interactor.getItemList().toUiList())
 
 }

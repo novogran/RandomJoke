@@ -20,4 +20,6 @@ abstract class CommonUiModel<T>(private val first: String, private val second: S
     open fun change(listener: CommonDataRecyclerAdapter.FavoriteItemClickListener<T>) = Unit
 
     open fun matches(id:T): Boolean = false
+
+    open fun same(model:CommonUiModel<T>): Boolean = false
 }
