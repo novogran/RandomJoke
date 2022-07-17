@@ -1,6 +1,5 @@
 package com.example.randomjoke
 
-import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,15 +40,8 @@ class CommonDataRecyclerAdapter<T>(
     override fun getItemCount() = communication.getList().size
 
     fun update(){
-        notifyDataSetChanged()
-    }
-
-    fun update(pair:Pair<Boolean,Int>){
-        if(pair.first){
-            notifyItemInserted(pair.second)
-        } else {
-            notifyItemRemoved(pair.second)
-        }
+        val result = communication.getDiffResult()
+        result.dispatchUpdatesTo(this)
     }
 
     abstract class CommonDataViewHolder<T>(view: View): RecyclerView.ViewHolder(view){
