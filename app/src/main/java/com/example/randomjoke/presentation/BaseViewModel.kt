@@ -9,7 +9,8 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
-class BaseViewModel<T>(
+abstract class BaseViewModel<T>(
+    private val name:String,
     private val interactor: CommonInteractor<T>,
     private val communication: CommonCommunication<T>,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
