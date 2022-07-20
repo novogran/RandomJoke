@@ -7,4 +7,4 @@ import com.example.randomjoke.presentation.BaseViewModel
 class QuoteViewModel(
     interactor: CommonInteractor<String>,
     communication: CommonCommunication<String>
-): BaseViewModel<String>("quotes", interactor,communication)
+): BaseViewModel<String>( interactor,communication)
