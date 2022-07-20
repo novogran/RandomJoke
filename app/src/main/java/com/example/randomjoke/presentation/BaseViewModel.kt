@@ -10,9 +10,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<T>(
-    private val name:String,
     private val interactor: CommonInteractor<T>,
-    private val communication: CommonCommunication<T>,
+    val communication: CommonCommunication<T>,
     private val dispatcher: CoroutineDispatcher = Dispatchers.Main
     ): ViewModel(), CommonViewModel<T> {
 
