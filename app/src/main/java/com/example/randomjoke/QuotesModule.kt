@@ -18,7 +18,7 @@ class QuotesModule(
     private val failureHandler: FailureHandler,
     private val realmProvider: RealmProvider,
     private val retrofit: Retrofit
-) : BaseModel<String, QuoteViewModel>() {
+) : Module.Base<String, QuoteViewModel>() {
 
     private var communication: BaseCommunication<String>? = null
 

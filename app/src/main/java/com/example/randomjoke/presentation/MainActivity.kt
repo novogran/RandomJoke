@@ -3,10 +3,8 @@ package com.example.randomjoke.presentation
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.example.randomjoke.JokesFragment
-import com.example.randomjoke.QuotesFragment
-import com.example.randomjoke.R
-import com.example.randomjoke.TabListener
+import androidx.lifecycle.ViewModelProvider
+import com.example.randomjoke.*
 import com.google.android.material.tabs.TabLayout
 
 class MainActivity : AppCompatActivity() {
@@ -19,20 +17,35 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        val viewModel =
+            ViewModelProvider(this,(application as JokesAndQuotesApp).viewModelsFactory).get(
+                MainViewModel::class.java
+            )
         val tabLayout = findViewById<TabLayout>(R.id.tabLayout)
-        val tabChosen: (Boolean) -> Unit = { jokeChosen ->
-            if (jokeChosen)
-                show(JokesFragment())
-            else
-                show(QuotesFragment())
+        val tabChosen: (Int) -> Unit = { position ->
+            viewModel.save(position)
         }
         tabLayout.addOnTabSelectedListener(TabListener(tabChosen))
-        show(JokesFragment())
+        viewModel.observe(this){ position ->
+            tabLayout.getTabAt(position)?.select()
+            show(screens[position].newInstance())
+        }
+        viewModel.init()
     }
 
-    private fun show(fragment: Fragment){
-        supportFragmentManager.beginTransaction()
-            .replace(R.id.container, fragment)
+    private fun show(fragment: BaseFragment<*,*>) = with(supportFragmentManager){
+        if(fragments.isEmpty() || fragments.last().tag != fragment.tag)
+            beginTransaction()
+            .replace(R.id.container, fragment,fragment.tag)
             .commit()
     }
+}
+
+private class TabListener(private val tabChosen: (Int) -> Unit):
+    TabLayout.OnTabSelectedListener {
+    override fun onTabSelected(tab: TabLayout.Tab?) = tabChosen.invoke(tab?.position ?: 0)
+
+    override fun onTabUnselected(tab: TabLayout.Tab?) = Unit
+
+    override fun onTabReselected(tab: TabLayout.Tab?) = Unit
 }
