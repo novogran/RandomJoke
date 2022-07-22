@@ -1,9 +1,7 @@
 package com.example.randomjoke.presentation
 
 import android.app.Application
-import com.example.randomjoke.JokesModule
-import com.example.randomjoke.QuotesModule
-import com.example.randomjoke.ViewModelsFactory
+import com.example.randomjoke.*
 import com.example.randomjoke.core.data.cache.RealmProvider
 import com.example.randomjoke.core.domain.FailureHandler
 import com.example.randomjoke.data.cache.*
@@ -15,10 +13,11 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 
-class JokeApp: Application() {
+class JokesAndQuotesApp: Application() {
 
     val viewModelsFactory by lazy {
         ViewModelsFactory(
+            MainModule(persistentDataSource),
             JokesModule(failureHandler, realmProvider, retrofit),
             QuotesModule(failureHandler, realmProvider, retrofit)
         )
@@ -27,6 +26,7 @@ class JokeApp: Application() {
     private lateinit var retrofit: Retrofit
     private lateinit var realmProvider: RealmProvider
     private lateinit var failureHandler: FailureHandler
+    private lateinit var persistentDataSource: PersistentDataSource
 
     override fun onCreate() {
         super.onCreate()
@@ -42,7 +42,7 @@ class JokeApp: Application() {
             .build()
 
         realmProvider= BaseRealmProvide()
-        val resourceManager = BaseResourceManager(this)
-        failureHandler = FailureFactory(resourceManager)
+        failureHandler = FailureFactory(BaseResourceManager(this))
+        persistentDataSource = PersistentDataSource.Base(this)
     }
 }

@@ -10,7 +10,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.randomjoke.presentation.BaseViewModel
 import com.example.randomjoke.presentation.FavoriteDataView
-import com.example.randomjoke.presentation.JokeApp
+import com.example.randomjoke.presentation.JokesAndQuotesApp
 import com.google.android.material.snackbar.Snackbar
 
 abstract class BaseFragment<V: BaseViewModel<T>,T>: Fragment() {
@@ -21,7 +21,7 @@ abstract class BaseFragment<V: BaseViewModel<T>,T>: Fragment() {
         super.onCreate(savedInstanceState)
         viewModel = ViewModelProvider(
             this,
-            (requireActivity().application as JokeApp).viewModelsFactory
+            (requireActivity().application as JokesAndQuotesApp).viewModelsFactory
         ).get(getViewModelClass())
     }
 

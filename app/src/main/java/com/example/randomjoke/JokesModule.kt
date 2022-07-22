@@ -18,7 +18,7 @@ class JokesModule(
     private val failureHandler: FailureHandler,
     private val realmProvide: RealmProvider,
     private val retrofit: Retrofit
-): BaseModel<Int,JokeViewModel>() {
+): Module.Base<Int,JokeViewModel>() {
 
     private var communication: BaseCommunication<Int>? = null
 

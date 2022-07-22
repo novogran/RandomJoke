@@ -1,7 +1,5 @@
 package com.example.randomjoke
 
-import com.example.randomjoke.presentation.JokeApp
-
 class QuotesFragment: BaseFragment<QuoteViewModel,String>() {
 
     override fun checkBoxText() = R.string.show_favorite_quote
